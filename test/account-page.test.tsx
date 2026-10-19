@@ -24,6 +24,7 @@ const wallet = vi.hoisted(() => ({
 
 const apiMock = vi.hoisted(() => ({
   mandatesOf: vi.fn(),
+  vaultHistory: vi.fn(),
 }));
 
 const payflowMock = vi.hoisted(() => ({
@@ -40,7 +41,9 @@ const chainMock = vi.hoisted(() => ({
 }));
 
 vi.mock("@/lib/wallet", () => ({ useWallet: () => wallet }));
-vi.mock("@/lib/api", () => ({ api: { mandatesOf: apiMock.mandatesOf } }));
+vi.mock("@/lib/api", () => ({
+  api: { mandatesOf: apiMock.mandatesOf, vaultHistory: apiMock.vaultHistory },
+}));
 vi.mock("@/lib/payflow", () => ({ payflow: payflowMock, readContract: payflowMock.readContract }));
 vi.mock("@/lib/chain", () => ({ chainMandatesOf: chainMock.chainMandatesOf }));
 // Merchant names come from Horizon + stellar.toml; the page must render
@@ -96,6 +99,7 @@ beforeEach(async () => {
   wallet.networkMismatch = false;
   wallet.walletNetwork = null;
   apiMock.mandatesOf.mockReset();
+  apiMock.vaultHistory.mockReset();
   payflowMock.vaultBalance.mockReset();
   payflowMock.deposit.mockReset();
   payflowMock.withdraw.mockReset();
